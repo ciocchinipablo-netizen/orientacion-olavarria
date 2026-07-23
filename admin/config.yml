@@ -1,0 +1,21 @@
+backend:
+  name: github
+  repo: ciocchinipablo-netizen/orientacion-olavarria
+  branch: main
+
+media_folder: "img/blog"
+public_folder: "/img/blog"
+
+collections:
+  - name: "articulos"
+    label: "Artículos"
+    folder: "blog/posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Fecha", name: "date", widget: "datetime" }
+      - { label: "Categoría", name: "category", widget: "select", options: ["Elegir", "Herramientas", "Para padres", "Cambiar", "Familia", "Reflexión"] }
+      - { label: "Resumen corto", name: "excerpt", widget: "text" }
+      - { label: "Imagen de portada", name: "image", widget: "image", required: false }
+      - { label: "Contenido", name: "body", widget: "markdown" }
