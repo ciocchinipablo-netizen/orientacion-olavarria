@@ -2,6 +2,10 @@
   "name": "orientacion-olavarria",
   "compatibility_date": "2026-07-23",
   "main": "./worker/index.ts",
+  "routes": [
+    { "pattern": "orientacionolavarria.com.ar", "custom_domain": true },
+    { "pattern": "www.orientacionolavarria.com.ar", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./dist",
     "not_found_handling": "404-page",
