@@ -1,11 +1,6 @@
-# Forms runbook
+# Contact form runbook
 
-| Form | Component | Backend | Config |
-|---|---|---|---|
-| Contacto (`/contacto/`) | `src/components/ContactForm.astro` | our Worker, `worker/index.ts` → `POST /api/contacto` | `PUBLIC_TURNSTILE_SITE_KEY` (build var), `TURNSTILE_SECRET_KEY` (secret), `send_email` binding + vars in `wrangler.jsonc` |
-| Newsletter (`/blog/`) | `src/components/NewsletterForm.astro` | Buttondown | `PUBLIC_BUTTONDOWN_USER` (build var) |
-
-`PUBLIC_*` values are inlined into the HTML at **build time**. If one is missing the build still succeeds and logs a `[ContactForm]` / `[NewsletterForm]` warning, but that form won't work.
+The form (`src/components/ContactForm.astro`, `/contacto/`) posts to our own Worker (`worker/index.ts`, `POST /api/contacto`). Config: Turnstile site key (public, hardcoded in the component), `TURNSTILE_SECRET_KEY` (runtime secret), `send_email` binding + vars in `wrangler.jsonc`. No build variables are needed.
 
 ## Contact form flow
 
@@ -38,24 +33,7 @@ Source: <https://developers.cloudflare.com/email-routing/get-started/enable-emai
 Server-side validation: <https://developers.cloudflare.com/turnstile/get-started/server-side-validation/>. Tokens are single-use and valid for 5 minutes; the form resets the widget after each attempt.
 Turnstile has a free plan.
 
-## 3. Buttondown (newsletter)
-
-1. Create an account at <https://buttondown.com> (ideally with Pablo's email).
-2. The username is the `<username>` in `buttondown.com/<username>`. It also appears in **Settings → Embedding** in the form action `https://buttondown.com/api/emails/embed-subscribe/<username>`.
-3. Set it as the build variable `PUBLIC_BUTTONDOWN_USER`.
-
-This is a plain HTML POST. Buttondown's docs say not to call `embed-subscribe` via `fetch`, so the visitor lands on Buttondown's confirmation page, and new subscribers get a confirmation email.
-Free plan: first 100 subscribers. Sources: <https://buttondown.com/pricing>, <https://docs.buttondown.com/building-your-subscriber-base>.
-
-## 4. Cloudflare build variables
-
-`PUBLIC_BUTTONDOWN_USER` must be a **build** variable. Runtime "Variables & Secrets" are not visible to `astro build`.
-Dashboard → Worker → **Settings → Build → Build variables and secrets** → add it, then trigger a new build.
-Source: <https://developers.cloudflare.com/workers/ci-cd/builds/configuration/>
-
-`TURNSTILE_SECRET_KEY` is the opposite: a **runtime** secret (section 2), never a build variable.
-
-## 5. Testing
+## 3. Testing
 
 **Locally** (Worker plus built site):
 
@@ -69,7 +47,5 @@ Source: <https://developers.cloudflare.com/workers/ci-cd/builds/configuration/>
 
 **Production:**
 
-- Build log: no `[ContactForm]` / `[NewsletterForm]` warnings.
 - Submit `/contacto/` with your own email. Expect the "¡Gracias!…" message, a mail in Pablo's inbox from `web@…`, and "Responder" addressed to you.
 - If the mail doesn't arrive: Worker → Logs. Look for `contact: send_email failed <code>` (e.g. `E_SENDER_NOT_VERIFIED`, `E_RECIPIENT_NOT_ALLOWED`) or `contact: turnstile rejected`.
-- Newsletter: subscribe from `/blog/` with a test address. Expect the Buttondown confirmation page and email, then delete the test subscriber.

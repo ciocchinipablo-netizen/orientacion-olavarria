@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import NewsletterForm from '../../components/NewsletterForm.astro';
 import PostList from '../../components/PostList.astro';
 import { getPublishedPosts } from '../../lib/posts';
 
@@ -27,15 +26,6 @@ const posts = await getPublishedPosts();
       <p>Ya tenés el borrador casi listo — en cuanto lo pasemos en limpio, sale acá.</p>
     </article>
     )}
-  </div>
-</section>
-
-<section class="band">
-  <div class="stack narrow">
-    <p class="eyebrow">Newsletter</p>
-    <h2>Un artículo por mes, sin ruido.</h2>
-    <p class="lead">Si te sirve lo que escribo, te lo mando por mail cuando sale.</p>
-    <NewsletterForm />
   </div>
 </section>
 
