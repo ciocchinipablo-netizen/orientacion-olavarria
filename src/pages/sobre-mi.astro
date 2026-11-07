@@ -1,11 +1,15 @@
 ---
+import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import pablo from '../assets/pablo.jpg';
+import { siteGraph } from '../lib/schema';
 ---
-<BaseLayout title="Sobre mí — Pablo Ciocchini | Orientación Olavarría" description="Pablo Ciocchini, Lic. en Psicología (UNLP, M.P. 40361), formado en orientación vocacional y ocupacional. Atiende en Olavarría y online.">
+<BaseLayout title="Pablo Ciocchini, psicólogo (M.P. 40361) · Orientación Olavarría" description="Pablo Ciocchini, Lic. en Psicología (UNLP, M.P. 40361), formado en orientación vocacional y ocupacional. Atiende en Olavarría y online.">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(siteGraph)} />
 
 <section class="band hero">
   <div class="bio">
-    <div class="photo"><img src="/img/pablo.jpg" alt="Pablo Ciocchini" width="600" height="750"></div>
+    <div class="photo"><Picture src={pablo} alt="Pablo Ciocchini" formats={['avif', 'webp']} widths={[280, 560]} sizes="(max-width: 700px) 280px, 250px" loading="eager" /></div>
     <div class="stack">
       <p class="eyebrow">Sobre mí</p>
       <h1>Pablo Ciocchini</h1>

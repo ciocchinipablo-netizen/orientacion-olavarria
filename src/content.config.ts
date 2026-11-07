@@ -12,6 +12,7 @@ const blog = defineCollection({
     category: z.enum(CATEGORIES),
     excerpt: z.string(),
     image: z.string().optional(),
+    imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

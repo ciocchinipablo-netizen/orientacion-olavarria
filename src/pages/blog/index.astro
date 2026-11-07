@@ -16,6 +16,7 @@ const posts = await getPublishedPosts();
 </section>
 
 <section class="band tint">
+  <h2 style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0">Últimos artículos</h2>
   <div class="posts">
     {posts.length > 0 ? (
       <PostList posts={posts} />

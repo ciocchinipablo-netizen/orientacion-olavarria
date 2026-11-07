@@ -1,16 +1,21 @@
 ---
+import { Picture } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import biblioteca from '../assets/home/biblioteca.jpg';
 import PostList from '../components/PostList.astro';
 import { getPublishedPosts } from '../lib/posts';
+import { siteGraph } from '../lib/schema';
 
 const latest = (await getPublishedPosts()).slice(0, 3);
 ---
-<BaseLayout title="Orientación Vocacional en Olavarría — Orientación Olavarría" description="Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.">
+<BaseLayout title="Orientación vocacional en Olavarría y online · Pablo Ciocchini" description="Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(siteGraph)} />
 
 <div class="hero-bg">
-  <img src="/img/home/biblioteca.jpg" alt="" width="1064" height="950" fetchpriority="high">
+  <Picture src={biblioteca} alt="" formats={['avif', 'webp']} widths={[640, 1064]} sizes="100vw" loading="eager" fetchpriority="high" />
   <section class="band hero">
     <div class="stack hero-text">
+      <p class="eyebrow">Orientación vocacional y ocupacional · Olavarría y online</p>
       <h1>¿Y vos qué vas<br>a <em>estudiar</em>?</h1>
       <p class="lead">Es la pregunta más pesada que le hacemos a alguien de diecisiete años. Este es un espacio para responderla con tiempo, con método y sin que la decisión te caiga encima.</p>
       <div class="btnrow">
@@ -130,7 +135,7 @@ const latest = (await getPublishedPosts()).slice(0, 3);
     isolation: isolate;
     overflow: hidden;
   }
-  .hero-bg > img {
+  .hero-bg > :global(picture) > :global(img) {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -144,7 +149,7 @@ const latest = (await getPublishedPosts()).slice(0, 3);
     inset: 0;
     z-index: -1;
   }
-  .hero-bg > img { object-position: 55% 55%; }
+  .hero-bg > :global(picture) > :global(img) { object-position: 55% 55%; }
   .hero-bg::after {
     background:
       linear-gradient(90deg,
@@ -155,7 +160,7 @@ const latest = (await getPublishedPosts()).slice(0, 3);
   }
   .hero-text { max-width: 640px; }
   @media (max-width: 700px) {
-    .hero-bg > img { object-position: 60% 50%; }
+    .hero-bg > :global(picture) > :global(img) { object-position: 60% 50%; }
     .hero-bg::after {
       background:
         linear-gradient(color-mix(in srgb, var(--paper) 86%, transparent), color-mix(in srgb, var(--paper) 86%, transparent)),

@@ -54,7 +54,8 @@ collections:
         name: category
         widget: select
         options: [Elegir, Herramientas, Para padres, Cambiar, Familia, Reflexión]
-      - { label: Resumen corto, name: excerpt, widget: text, hint: "Una o dos oraciones que se muestran en el listado del blog." }
+      - { label: Resumen corto, name: excerpt, widget: text, hint: "Una o dos oraciones. ≈120–155 caracteres; se usa como descripción en Google y en el listado." }
       - { label: Imagen de portada, name: image, widget: image, required: false }
+      - { label: Descripción de la imagen, name: imageAlt, widget: string, required: false, hint: "Qué se ve en la imagen, para lectores de pantalla y buscadores. Dejalo vacío si es solo decorativa." }
       - { label: Borrador, name: draft, widget: boolean, default: false, required: false, hint: "Si está activado, el artículo se guarda pero no se publica en el sitio." }
       - { label: Contenido, name: body, widget: markdown }
