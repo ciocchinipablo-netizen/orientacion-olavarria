@@ -13,16 +13,25 @@ const website = {
   '@id': WEBSITE_ID,
   url: `${SITE_URL}/`,
   name: 'Orientación Olavarría',
+  alternateName: 'Orientación Vocacional Olavarría',
   inLanguage: 'es-AR',
   publisher: { '@id': PRACTICE_ID },
 };
 
-// Pending confirmation from Pablo: add `address` (PostalAddress), `geo`, `telephone`,
-// `openingHoursSpecification` and `priceRange` here once he OKs making them public.
+// Pablo chose: city only (no street address), by appointment only (no opening hours),
+// no public phone or email, fees on request (no priceRange). Google's optional-field
+// warnings for those are expected.
 const practice = {
   '@type': 'ProfessionalService',
   '@id': PRACTICE_ID,
   name: 'Orientación Olavarría',
+  alternateName: 'Orientación Vocacional Olavarría',
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Olavarría',
+    addressRegion: 'Buenos Aires',
+    addressCountry: 'AR',
+  },
   description:
     'Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.',
   url: `${SITE_URL}/`,
