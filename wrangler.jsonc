@@ -2,6 +2,8 @@
   "name": "orientacion-olavarria",
   "compatibility_date": "2026-07-23",
   "main": "./worker/index.ts",
+  // Runs before every `wrangler deploy` (incl. Cloudflare's Git builds), so dist/ always exists.
+  "build": { "command": "npm run build" },
   "routes": [
     { "pattern": "orientacionolavarria.com.ar", "custom_domain": true },
     { "pattern": "www.orientacionolavarria.com.ar", "custom_domain": true }
