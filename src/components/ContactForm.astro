@@ -5,10 +5,9 @@
  * - Plain POST: the Worker answers with a 303 to /contacto/?enviado=1 or ?error=1.
  * - With JS: submits via fetch (Accept: application/json) and shows the result in place.
  */
-const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
-if (!siteKey) {
-  console.warn('[ContactForm] PUBLIC_TURNSTILE_SITE_KEY is not set; the Turnstile widget will not render and submissions will be rejected. See docs/forms.md.');
-}
+// Turnstile site keys are public (sent to every browser). The env var only overrides it,
+// e.g. with Turnstile's always-pass test key for local testing.
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAF3nARS71lPv7Zyn';
 ---
 <form class="form" name="contacto" method="POST" action="/api/contacto" data-contact-form>
   <div class="field">

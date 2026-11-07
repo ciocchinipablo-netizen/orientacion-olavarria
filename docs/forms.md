@@ -31,7 +31,7 @@ Source: <https://developers.cloudflare.com/email-routing/get-started/enable-emai
 ## 2. Turnstile (one-time)
 
 1. Dashboard → **Turnstile → Add widget**. Name it "Orientación Olavarría contacto". Hostnames: `orientacionolavarria.com.ar` (also `www.` and the `*.workers.dev` preview host if those will be used). Widget mode: Managed.
-2. Copy the **site key** → Workers Builds build variable `PUBLIC_TURNSTILE_SITE_KEY` (see section 4).
+2. The **site key** is public and hardcoded in `src/components/ContactForm.astro`; update it there if the widget is recreated. `PUBLIC_TURNSTILE_SITE_KEY` only overrides it (local testing).
 3. Copy the **secret key** → Worker secret:
    `npx wrangler secret put TURNSTILE_SECRET_KEY`, or Dashboard → Worker → **Settings → Variables & Secrets** → Add → type Secret.
 
@@ -49,38 +49,11 @@ Free plan: first 100 subscribers. Sources: <https://buttondown.com/pricing>, <ht
 
 ## 4. Cloudflare build variables
 
-`PUBLIC_TURNSTILE_SITE_KEY` and `PUBLIC_BUTTONDOWN_USER` must be **build** variables. Runtime "Variables & Secrets" are not visible to `astro build`.
-Dashboard → Worker → **Settings → Build → Build variables and secrets** → add both, then trigger a new build.
+`PUBLIC_BUTTONDOWN_USER` must be a **build** variable. Runtime "Variables & Secrets" are not visible to `astro build`.
+Dashboard → Worker → **Settings → Build → Build variables and secrets** → add it, then trigger a new build.
 Source: <https://developers.cloudflare.com/workers/ci-cd/builds/configuration/>
 
 `TURNSTILE_SECRET_KEY` is the opposite: a **runtime** secret (section 2), never a build variable.
-
-## wrangler.jsonc changes
-
-Merge into the existing `wrangler.jsonc`. Keep `name`, `compatibility_date`, `assets.directory` and `not_found_handling` as they are. Replace `PABLO_EMAIL` with Pablo's verified destination address (in both places).
-
-```jsonc
-{
-  "main": "./worker/index.ts",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "404-page",
-    "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
-  },
-  "send_email": [
-    { "name": "CONTACT_EMAIL", "destination_address": "PABLO_EMAIL" }
-  ],
-  "vars": {
-    "CONTACT_TO": "PABLO_EMAIL",
-    "CONTACT_FROM": "web@orientacionolavarria.com.ar"
-  }
-}
-```
-
-- `run_worker_first: ["/api/*"]` runs the Worker only for `/api/*`. All other requests hit static assets directly (free, no Worker invocation). Source: <https://developers.cloudflare.com/workers/static-assets/binding/>
-- `destination_address` locks the binding to Pablo's inbox, so a bug can't email anyone else. Source: <https://developers.cloudflare.com/email-service/configuration/send-bindings/>
-- `TURNSTILE_SECRET_KEY` is a secret, so it is not in `vars`.
 
 ## 5. Testing
 
