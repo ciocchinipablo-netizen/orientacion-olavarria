@@ -19,8 +19,8 @@ const website = {
 };
 
 // Pablo chose: city only (no street address), by appointment only (no opening hours),
-// no public phone or email, fees on request (no priceRange). Google's optional-field
-// warnings for those are expected.
+// WhatsApp number public but no email, fees on request (no priceRange). Google's
+// optional-field warnings for those are expected.
 const practice = {
   '@type': 'ProfessionalService',
   '@id': PRACTICE_ID,
@@ -32,6 +32,7 @@ const practice = {
     addressRegion: 'Buenos Aires',
     addressCountry: 'AR',
   },
+  telephone: '+54 9 2284 33-2382',
   description:
     'Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.',
   url: `${SITE_URL}/`,
