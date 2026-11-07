@@ -212,26 +212,15 @@ a { color: var(--accent-ink); }
 /* ---------- bio ---------- */
 
 .bio { display: grid; grid-template-columns: 250px 1fr; gap: 44px; align-items: start; }
-@media (max-width: 700px) { .bio { grid-template-columns: 1fr; gap: 28px; } }
+@media (max-width: 700px) { .bio { grid-template-columns: 1fr; gap: 28px; } .photo { max-width: 280px; } }
 .photo {
   aspect-ratio: 4 / 5;
-  background:
-    repeating-linear-gradient(45deg, transparent 0 9px, color-mix(in srgb, var(--ink) 5%, transparent) 9px 10px),
-    var(--paper-2);
+  background: var(--paper-2);
   border: 1px solid var(--line);
   border-radius: var(--r);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 12px;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-  padding: 16px;
   overflow: hidden;
 }
-.photo img { width: 100%; height: 100%; object-fit: cover; }
+.photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .facts { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
 .fact { display: flex; flex-direction: column; gap: 2px; }
 .fact dt { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); }
