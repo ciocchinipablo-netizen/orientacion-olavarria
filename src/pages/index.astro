@@ -7,17 +7,20 @@ const latest = (await getPublishedPosts()).slice(0, 3);
 ---
 <BaseLayout title="Orientación Vocacional en Olavarría — Orientación Olavarría" description="Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.">
 
-<section class="band hero">
-  <div class="stack wide">
-    <h1>¿Y vos qué vas<br>a <em>estudiar</em>?</h1>
-    <p class="lead">Es la pregunta más pesada que le hacemos a alguien de diecisiete años. Este es un espacio para responderla con tiempo, con método y sin que la decisión te caiga encima.</p>
-    <div class="btnrow">
-      <a class="btn" href="/contacto/">Pedir una primera entrevista</a>
-      <a class="btn ghost" href="/proceso/">Cómo trabajo</a>
+<div class="hero-bg">
+  <img src="/img/home/biblioteca.jpg" alt="" width="1064" height="950" fetchpriority="high">
+  <section class="band hero">
+    <div class="stack hero-text">
+      <h1>¿Y vos qué vas<br>a <em>estudiar</em>?</h1>
+      <p class="lead">Es la pregunta más pesada que le hacemos a alguien de diecisiete años. Este es un espacio para responderla con tiempo, con método y sin que la decisión te caiga encima.</p>
+      <div class="btnrow">
+        <a class="btn" href="/contacto/">Pedir una primera entrevista</a>
+        <a class="btn ghost" href="/proceso/">Cómo trabajo</a>
+      </div>
+      <p class="quiet">Atención presencial en Olavarría y online</p>
     </div>
-    <p class="quiet">Atención presencial en Olavarría y online</p>
-  </div>
-</section>
+  </section>
+</div>
 
 <section class="band tint">
   <div class="stack-lg">
@@ -120,3 +123,43 @@ const latest = (await getPublishedPosts()).slice(0, 3);
 </section>
 
 </BaseLayout>
+
+<style>
+  .hero-bg {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+  .hero-bg > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+  }
+  .hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .hero-bg > img { object-position: 55% 55%; }
+  .hero-bg::after {
+    background:
+      linear-gradient(90deg,
+        color-mix(in srgb, var(--paper) 96%, transparent) 0%,
+        color-mix(in srgb, var(--paper) 90%, transparent) 45%,
+        color-mix(in srgb, var(--paper) 45%, transparent) 100%),
+      color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+  .hero-text { max-width: 640px; }
+  @media (max-width: 700px) {
+    .hero-bg > img { object-position: 60% 50%; }
+    .hero-bg::after {
+      background:
+        linear-gradient(color-mix(in srgb, var(--paper) 86%, transparent), color-mix(in srgb, var(--paper) 86%, transparent)),
+        color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+  }
+</style>
