@@ -20,19 +20,27 @@ Either:
 
 Note the Worker URL, e.g. `https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev`.
 
-## 2. Create the GitHub OAuth App
+## 2. Create the GitHub App
 
-GitHub → Settings → Developer settings → OAuth Apps → **New OAuth App**
-(https://github.com/settings/applications/new). Create it under the account that owns
-the repo (`ciocchinipablo-netizen`) or any account — it only needs to exist once.
+A **GitHub App** (not an OAuth App) is used so sign-ins can only touch this one repo:
+OAuth App scopes (`repo` / `public_repo`) cover every repo the user can push to, while a
+GitHub App's user tokens are limited to its permissions and the repos it's installed on.
+The worker and CMS treat it the same way (same authorize URL, client ID/secret).
+
+Under the repo owner's account (`ciocchinipablo-netizen`): Settings → Developer settings →
+GitHub Apps → **New GitHub App** (https://github.com/settings/apps/new).
 
 | Field | Value |
 |---|---|
-| Application name | `Sveltia CMS Authenticator` (anything) |
-| Homepage URL | `https://orientacionolavarria.com.ar` (anything) |
-| Authorization callback URL | `<WORKER_URL>/callback` — e.g. `https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev/callback` |
+| Homepage URL | `https://orientacionolavarria.com.ar` |
+| Callback URL | `<WORKER_URL>/callback` — e.g. `https://sveltia-cms-auth.<SUBDOMAIN>.workers.dev/callback` |
+| Expire user authorization tokens | **off** (otherwise the CMS session dies after 8 h) |
+| Webhook → Active | off |
+| Repository permissions | **Contents: Read and write** (Metadata: read is automatic); nothing else |
+| Where can it be installed | Only on this account |
 
-Register, then **Generate a new client secret**. Copy the **Client ID** and **Client secret**.
+Create it, copy the **Client ID** (not the App ID), **Generate a new client secret**, then
+**Install App** → Only select repositories → `orientacion-olavarria`.
 
 ## 3. Set the Worker variables
 
@@ -40,7 +48,7 @@ Cloudflare dashboard → Workers & Pages → the worker → **Settings → Varia
 
 | Name | Value | Type |
 |---|---|---|
-| `GITHUB_CLIENT_ID` | Client ID from step 2 | plain text |
+| `GITHUB_CLIENT_ID` | Client ID from step 2 | **Encrypt** (secret) |
 | `GITHUB_CLIENT_SECRET` | Client secret from step 2 | **Encrypt** (secret) |
 | `ALLOWED_DOMAINS` | `orientacionolavarria.com.ar, *.orientacionolavarria.com.ar` | plain text |
 
@@ -48,7 +56,7 @@ Add the `*.workers.dev` host of the site to `ALLOWED_DOMAINS` too if you want to
 from a preview URL before the custom domain is live (comma-separated hostnames;
 `*.example.com` does not match the bare `example.com`). Save and deploy.
 
-CLI alternative: `npx wrangler secret put GITHUB_CLIENT_SECRET` (and the others as vars).
+CLI alternative: `wrangler secret put GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET`, and `wrangler deploy --var "ALLOWED_DOMAINS:..."`. Keep both client values as secrets: plain dashboard vars are wiped by the next CLI deploy.
 
 ## 4. Point the CMS at the Worker
 

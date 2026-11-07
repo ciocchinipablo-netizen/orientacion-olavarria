@@ -9,6 +9,9 @@ backend:
   branch: main
   # GitHub OAuth relay (sveltia-cms-auth Worker). See docs/cms-auth.md.
   base_url: https://sveltia-cms-auth.ciocchinipablo.workers.dev
+  # Repo is public: request public_repo only (no private-repo or profile write access).
+  # Switch to repo if the repository is ever made private.
+  auth_scope: public_repo
   commit_messages:
     create: 'Nuevo artículo: "{{slug}}"'
     update: 'Editar artículo: "{{slug}}"'
