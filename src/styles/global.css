@@ -264,3 +264,16 @@ a { color: var(--accent-ink); }
 .article-body { display: flex; flex-direction: column; gap: 20px; max-width: 680px; }
 .article-body p { max-width: none; font-size: 17px; color: var(--ink); }
 .article-body h2 { font-size: 26px; margin-top: 12px; }
+.article-body h3 { font-size: 21px; margin-top: 6px; }
+.article-body ul, .article-body ol { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 8px; font-size: 17px; }
+.article-body li { padding-left: 4px; }
+.article-body li::marker { color: var(--gold); }
+.article-body ol li::marker { font-family: var(--serif); }
+.article-body li > ul, .article-body li > ol { margin-top: 8px; }
+.article-body blockquote { margin: 4px 0; padding-left: 20px; border-left: 2px solid var(--gold); display: flex; flex-direction: column; gap: 12px; }
+.article-body blockquote p { font-family: var(--serif); font-size: 20px; line-height: 1.5; color: var(--ink-soft); }
+.article-body a { text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.article-body a:hover { text-decoration-thickness: 2px; }
+.article-body img { height: auto; border-radius: var(--r); margin: 8px 0; }
+.article-body hr { border: 0; border-top: 1px solid var(--line); margin: 12px 0; width: 100%; }
+.article-body strong { font-weight: 600; }
