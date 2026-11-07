@@ -1,0 +1,58 @@
+# Sveltia CMS configuration — https://sveltiacms.app/en/docs
+# Setup of the login worker (base_url): see docs/cms-auth.md
+# UI language: Sveltia has no `locale` option; it follows the browser language
+# (Spanish available) and can be changed in User Settings.
+
+backend:
+  name: github
+  repo: ciocchinipablo-netizen/orientacion-olavarria
+  branch: main
+  # PLACEHOLDER: replace with the sveltia-cms-auth Worker URL once it is deployed
+  # (e.g. https://sveltia-cms-auth.<subdomain>.workers.dev). See docs/cms-auth.md.
+  base_url: https://sveltia-cms-auth.REPLACE-ME.workers.dev
+  commit_messages:
+    create: 'Nuevo artículo: "{{slug}}"'
+    update: 'Editar artículo: "{{slug}}"'
+    delete: 'Borrar artículo: "{{slug}}"'
+    uploadMedia: 'Subir imagen "{{path}}"'
+    deleteMedia: 'Borrar imagen "{{path}}"'
+
+media_folder: public/img/blog
+public_folder: /img/blog
+
+# Spanish titles -> clean ASCII slugs ("Reflexión sobre el año" -> reflexion-sobre-el-ano)
+slug:
+  encoding: ascii
+  clean_accents: true
+
+# Don't write `image: ""` when no cover image is chosen
+output:
+  omit_empty_optional_fields: true
+
+collections:
+  - name: blog
+    label: Artículos
+    label_singular: Artículo
+    folder: src/content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{slug}}"
+    summary: "{{title}} — {{date | date('DD/MM/YYYY')}} {{draft | ternary('(borrador)', '')}}"
+    sortable_fields:
+      fields: [date, title, category]
+      default:
+        field: date
+        direction: descending
+    fields:
+      - { label: Título, name: title, widget: string }
+      # No `format`: stored as ISO 8601 (YYYY-MM-DDTHH:mm:ss), parsable by z.coerce.date()
+      - { label: Fecha, name: date, widget: datetime, default: "{{now}}" }
+      - label: Categoría
+        name: category
+        widget: select
+        options: [Elegir, Herramientas, Para padres, Cambiar, Familia, Reflexión]
+      - { label: Resumen corto, name: excerpt, widget: text, hint: "Una o dos oraciones que se muestran en el listado del blog." }
+      - { label: Imagen de portada, name: image, widget: image, required: false }
+      - { label: Borrador, name: draft, widget: boolean, default: false, required: false, hint: "Si está activado, el artículo se guarda pero no se publica en el sitio." }
+      - { label: Contenido, name: body, widget: markdown }

@@ -1,31 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<title>El proceso de orientación vocacional — Orientación Olavarría</title>
-<meta name="description" content="Cómo es un proceso de orientación vocacional en Olavarría: etapas, duración, modalidad y qué NO es. Presencial y online.">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="canonical" href="https://orientacionolavarria.com.ar/proceso.html">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-
-<nav class="sitenav">
-  <a class="brand" href="/">
-    <b>Orientación Olavarría</b>
-    <span>Vocacional · Ocupacional</span>
-  </a>
-  <div class="tabs" role="tablist">
-    <a href="/">Inicio</a>
-    <a href="/proceso.html" aria-current="page">El proceso</a>
-    <a href="/sobre-mi.html">Sobre mí</a>
-    <a href="/blog/">Artículos</a>
-    <a href="/contacto.html">Contacto</a>
-  </div>
-</nav>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="El proceso de orientación vocacional — Orientación Olavarría" description="Cómo es un proceso de orientación vocacional en Olavarría: etapas, duración, modalidad y qué NO es. Presencial y online.">
 
 <section class="band hero">
   <div class="stack wide">
@@ -120,14 +96,8 @@
   <div class="stack narrow">
     <h2>¿Te queda alguna duda?</h2>
     <p class="lead">Escribime y te la respondo. Sin vueltas y sin compromiso.</p>
-    <div class="btnrow"><a class="btn" href="/contacto.html">Hacer una consulta</a></div>
+    <div class="btnrow"><a class="btn" href="/contacto/">Hacer una consulta</a></div>
   </div>
 </section>
 
-<footer class="foot">
-  <span>Orientación Olavarría · Espacio de orientación vocacional y ocupacional</span>
-  <span>Olavarría, Argentina</span>
-</footer>
-
-</body>
-</html>
+</BaseLayout>

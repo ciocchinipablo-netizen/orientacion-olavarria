@@ -1,0 +1,61 @@
+---
+import { render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, getPublishedPosts, isoDate, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, excerpt, category, date, image } = post.data;
+const { Content } = await render(post);
+
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: excerpt,
+  datePublished: isoDate(date),
+  inLanguage: 'es-AR',
+  mainEntityOfPage: url,
+  url,
+  ...(image && { image: new URL(image, Astro.site).href }),
+  author: { '@type': 'Person', name: 'Pablo Ciocchini' },
+  publisher: { '@type': 'Organization', name: 'Orientación Olavarría' },
+};
+---
+<BaseLayout title={`${title} — Orientación Olavarría`} description={excerpt} ogType="article" image={image}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+<section class="band hero">
+  <div class="stack wide">
+    <p class="eyebrow">{category}</p>
+    <h1>{title}</h1>
+    <p class="quiet"><time datetime={isoDate(date)}>{formatDate(date)}</time></p>
+  </div>
+</section>
+
+<section class="band">
+  <article class="article-body">
+    {image && <img src={image} alt="" />}
+    <Content />
+    <p><a href="/blog/">← Volver a los artículos</a></p>
+  </article>
+</section>
+
+<section class="band tint">
+  <div class="stack narrow">
+    <h2>Una primera entrevista no compromete a nada.</h2>
+    <p class="lead">Nos conocemos, me contás en qué andás y te explico cómo trabajo. Si te sirve, seguimos.</p>
+    <div class="btnrow"><a class="btn" href="/contacto/">Escribirme</a></div>
+  </div>
+</section>
+
+</BaseLayout>

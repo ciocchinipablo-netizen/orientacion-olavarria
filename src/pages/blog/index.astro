@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterForm from '../../components/NewsletterForm.astro';
+import PostList from '../../components/PostList.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+---
+<BaseLayout title="Artículos sobre orientación vocacional — Orientación Olavarría" description="Artículos sobre orientación vocacional y ocupacional: elegir carrera, tests vocacionales, acompañar a un hijo que no sabe qué estudiar, y más.">
+
+<section class="band hero">
+  <div class="stack wide">
+    <p class="eyebrow">Artículos</p>
+    <h1>Pensar la elección.</h1>
+    <p class="lead">Escribo sobre las preguntas que más se repiten en el consultorio. Si algo de acá te resuena, probablemente valga la pena que hablemos.</p>
+  </div>
+</section>
+
+<section class="band tint">
+  <div class="posts">
+    {posts.length > 0 ? (
+      <PostList posts={posts} />
+    ) : (
+    <article class="post">
+      <span class="meta">Próximamente</span>
+      <h3>El primer artículo está en camino</h3>
+      <p>Ya tenés el borrador casi listo — en cuanto lo pasemos en limpio, sale acá.</p>
+    </article>
+    )}
+  </div>
+</section>
+
+<section class="band">
+  <div class="stack narrow">
+    <p class="eyebrow">Newsletter</p>
+    <h2>Un artículo por mes, sin ruido.</h2>
+    <p class="lead">Si te sirve lo que escribo, te lo mando por mail cuando sale.</p>
+    <NewsletterForm />
+  </div>
+</section>
+
+</BaseLayout>

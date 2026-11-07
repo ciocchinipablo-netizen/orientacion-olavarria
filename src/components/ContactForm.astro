@@ -1,0 +1,109 @@
+---
+/**
+ * Contact form posting to our own Worker (worker/index.ts, POST /api/contacto),
+ * protected by Cloudflare Turnstile. See docs/forms.md.
+ * - Plain POST: the Worker answers with a 303 to /contacto/?enviado=1 or ?error=1.
+ * - With JS: submits via fetch (Accept: application/json) and shows the result in place.
+ */
+const siteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+if (!siteKey) {
+  console.warn('[ContactForm] PUBLIC_TURNSTILE_SITE_KEY is not set; the Turnstile widget will not render and submissions will be rejected. See docs/forms.md.');
+}
+---
+<form class="form" name="contacto" method="POST" action="/api/contacto" data-contact-form>
+  <div class="field">
+    <label for="n">Nombre</label>
+    <input id="n" name="nombre" type="text" placeholder="Cómo te llamás" maxlength="100" required>
+  </div>
+  <div class="field">
+    <label for="e">Correo</label>
+    <input id="e" name="email" type="email" placeholder="nombre@correo.com" maxlength="254" required>
+  </div>
+  <div class="field">
+    <label for="s">¿Cuál es tu situación?</label>
+    <select id="s" name="situacion">
+      <option>Estoy terminando el secundario</option>
+      <option>Empecé una carrera y dudo</option>
+      <option>Soy madre / padre y consulto por mi hijo</option>
+      <option>Estoy pensando un cambio de rumbo</option>
+      <option>Otra</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="m">Contame un poco</label>
+    <textarea id="m" name="mensaje" placeholder="No hace falta que sea largo." maxlength="5000"></textarea>
+  </div>
+  {siteKey && <div class="cf-turnstile" data-sitekey={siteKey} data-language="es"></div>}
+  <div><button class="btn" type="submit">Enviar consulta</button></div>
+  <p data-form-status role="status" aria-live="polite" hidden style="margin:0;font-weight:500"></p>
+  <noscript><p style="margin:0">Para enviar el formulario hace falta JavaScript. Si no, escribime por WhatsApp o Instagram.</p></noscript>
+  <p class="quiet" style="margin-top:6px">También por <a href="https://wa.me/549[NÚMERO]" target="_blank" rel="noopener">WhatsApp</a> o por <a href="https://instagram.com/orientacionolav" target="_blank" rel="noopener">Instagram</a></p>
+</form>
+
+{siteKey && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+
+<script>
+  const MESSAGES: Record<string, string> = {
+    ok: '¡Gracias! Recibí tu consulta y te respondo a la brevedad.',
+    captcha: 'No pudimos verificar el envío. Esperá a que termine la verificación y probá de nuevo.',
+    invalid: 'Revisá los datos: nombre y un correo válido son necesarios.',
+    fail: 'No se pudo enviar la consulta. Probá de nuevo en un rato o escribime por WhatsApp o Instagram.',
+  };
+
+  const messageFor = (error?: string) => {
+    if (!error) return MESSAGES.fail;
+    if (error.startsWith('captcha')) return MESSAGES.captcha;
+    if (/^(nombre|email|situacion|mensaje)_/.test(error)) return MESSAGES.invalid;
+    return MESSAGES.fail;
+  };
+
+  type Turnstile = { reset(target?: string | HTMLElement): void };
+
+  document.querySelectorAll<HTMLFormElement>('form[data-contact-form]').forEach((form) => {
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const status = form.querySelector<HTMLElement>('[data-form-status]');
+    const widget = form.querySelector<HTMLElement>('.cf-turnstile');
+    const label = button?.textContent ?? '';
+    if (!button || !status) return;
+
+    const show = (text: string) => {
+      status.textContent = text;
+      status.hidden = false;
+    };
+
+    // Result of a no-JS-style submission (Worker redirected back here).
+    const params = new URLSearchParams(location.search);
+    if (params.has('enviado')) show(MESSAGES.ok);
+    else if (params.has('error')) show(MESSAGES.fail);
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      button.disabled = true;
+      button.textContent = 'Enviando…';
+      status.hidden = true;
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+        if (res.ok && data.ok) {
+          form.reset();
+          show(MESSAGES.ok);
+        } else {
+          show(messageFor(data.error));
+        }
+      } catch (err) {
+        console.error('[ContactForm] submit failed', err);
+        show(MESSAGES.fail);
+      } finally {
+        // Turnstile tokens are single-use; get a fresh one for any retry.
+        if (widget) (window as unknown as { turnstile?: Turnstile }).turnstile?.reset(widget);
+        button.disabled = false;
+        button.textContent = label;
+      }
+    });
+  });
+</script>

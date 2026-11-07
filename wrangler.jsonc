@@ -1,7 +1,17 @@
 {
   "name": "orientacion-olavarria",
   "compatibility_date": "2026-07-23",
+  "main": "./worker/index.ts",
   "assets": {
-    "directory": "."
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  // Must be a verified Email Routing destination address (see docs/forms.md).
+  "send_email": [{ "name": "CONTACT_EMAIL", "destination_address": "ciocchinipablo@gmail.com" }],
+  "vars": {
+    "CONTACT_TO": "ciocchinipablo@gmail.com",
+    "CONTACT_FROM": "web@orientacionolavarria.com.ar"
   }
 }

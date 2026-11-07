@@ -1,39 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="utf-8">
-<title>Orientación Vocacional en Olavarría — Orientación Olavarría</title>
-<meta name="description" content="Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="canonical" href="https://orientacionolavarria.com.ar/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css">
-</head>
-<body>
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PostList from '../components/PostList.astro';
+import { getPublishedPosts } from '../lib/posts';
 
-<nav class="sitenav">
-  <a class="brand" href="/">
-    <b>Orientación Olavarría</b>
-    <span>Vocacional · Ocupacional</span>
-  </a>
-  <div class="tabs" role="tablist">
-    <a href="/" aria-current="page">Inicio</a>
-    <a href="/proceso.html">El proceso</a>
-    <a href="/sobre-mi.html">Sobre mí</a>
-    <a href="/blog/">Artículos</a>
-    <a href="/contacto.html">Contacto</a>
-  </div>
-</nav>
+const latest = (await getPublishedPosts()).slice(0, 3);
+---
+<BaseLayout title="Orientación Vocacional en Olavarría — Orientación Olavarría" description="Espacio de orientación vocacional y ocupacional en Olavarría, con Pablo Ciocchini, psicólogo (M.P. 40361). Atención presencial y online.">
 
 <section class="band hero">
   <div class="stack wide">
     <h1>¿Y vos qué vas<br>a <em>estudiar</em>?</h1>
     <p class="lead">Es la pregunta más pesada que le hacemos a alguien de diecisiete años. Este es un espacio para responderla con tiempo, con método y sin que la decisión te caiga encima.</p>
     <div class="btnrow">
-      <a class="btn" href="/contacto.html">Pedir una primera entrevista</a>
-      <a class="btn ghost" href="/proceso.html">Cómo trabajo</a>
+      <a class="btn" href="/contacto/">Pedir una primera entrevista</a>
+      <a class="btn ghost" href="/proceso/">Cómo trabajo</a>
     </div>
     <p class="quiet">Atención presencial en Olavarría y online</p>
   </div>
@@ -117,11 +97,15 @@
       <h2>Escribo sobre esto.</h2>
     </div>
     <div class="posts" id="home-posts">
+      {latest.length > 0 ? (
+        <PostList posts={latest} />
+      ) : (
       <article class="post">
         <span class="meta">Próximamente</span>
         <h3><a href="/blog/">El primer artículo está en camino</a></h3>
         <p>En cuanto publique el primero, va a aparecer acá.</p>
       </article>
+      )}
     </div>
     <div><a class="btn ghost" href="/blog/">Ver todos los artículos</a></div>
   </div>
@@ -131,14 +115,8 @@
   <div class="stack narrow">
     <h2>Una primera entrevista no compromete a nada.</h2>
     <p class="lead">Nos conocemos, me contás en qué andás y te explico cómo trabajo. Si te sirve, seguimos.</p>
-    <div class="btnrow"><a class="btn" href="/contacto.html">Escribirme</a></div>
+    <div class="btnrow"><a class="btn" href="/contacto/">Escribirme</a></div>
   </div>
 </section>
 
-<footer class="foot">
-  <span>Orientación Olavarría · Espacio de orientación vocacional y ocupacional</span>
-  <span>Olavarría, Argentina</span>
-</footer>
-
-</body>
-</html>
+</BaseLayout>

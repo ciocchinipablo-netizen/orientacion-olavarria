@@ -1,0 +1,68 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: 'website' | 'article';
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, ogType = 'website', image, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const imageUrl = image ? new URL(image, Astro.site).href : undefined;
+const path = Astro.url.pathname;
+
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/proceso/', label: 'El proceso' },
+  { href: '/sobre-mi/', label: 'Sobre mí' },
+  { href: '/blog/', label: 'Artículos' },
+  { href: '/contacto/', label: 'Contacto' },
+];
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>{title}</title>
+<meta name="description" content={description}>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{noindex ? <meta name="robots" content="noindex"> : <link rel="canonical" href={canonical}>}
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:type" content={ogType}>
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Orientación Olavarría">
+{imageUrl && <meta property="og:image" content={imageUrl}>}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<slot name="head" />
+</head>
+<body>
+
+<nav class="sitenav">
+  <a class="brand" href="/">
+    <b>Orientación Olavarría</b>
+    <span>Vocacional · Ocupacional</span>
+  </a>
+  <div class="tabs">
+    {links.map(({ href, label }) => (
+      <a href={href} aria-current={isCurrent(href) ? 'page' : undefined}>{label}</a>
+    ))}
+  </div>
+</nav>
+
+<slot />
+
+<footer class="foot">
+  <span>Orientación Olavarría · Espacio de orientación vocacional y ocupacional</span>
+  <span>Olavarría, Argentina</span>
+</footer>
+
+</body>
+</html>
