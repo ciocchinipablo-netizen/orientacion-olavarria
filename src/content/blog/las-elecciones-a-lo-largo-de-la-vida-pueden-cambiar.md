@@ -3,7 +3,7 @@ title: 'Las elecciones a lo largo de la vida: ¿pueden cambiar?'
 date: 2026-11-07T13:48:00
 category: Reflexión
 excerpt: 'Muchos de los consultantes que empiezan un proceso de Orientación Vocacional, presentan un temor común: el miedo a equivocarse en su elección, o el miedo a no estar eligiendo la mejor opción.'
-draft: true
+draft: false
 ---
 
 Muchos de los consultantes que empiezan un proceso de Orientación Vocacional, presentan un temor común: el miedo a equivocarse en su elección, o el miedo a no estar eligiendo la mejor opción.
